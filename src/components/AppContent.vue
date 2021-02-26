@@ -9,7 +9,7 @@
         <h4 class="alert-heading">Data was cached!</h4>
         <p>You can clear cache and load data again.</p>
         <hr/>
-        <button class="btn btn-sm btn-primary mr-auto">
+        <button class="btn btn-sm btn-primary mr-auto" @click="clearCache">
           Clear cache
         </button>
       </div>
@@ -70,6 +70,10 @@ export default {
     ...mapActions([
       'load',
     ]),
+    clearCache() {
+      localStorage.removeItem('rows');
+      this.$store.commit('set', { isCached: false });
+    },
   },
 };
 </script>

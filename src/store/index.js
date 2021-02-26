@@ -32,10 +32,21 @@ export default new Vuex.Store({
       commit('set', { isLoading: true });
 
       try {
-        const { data } = await api.getPayments(params);
+        const cachedData = JSON.parse(localStorage.getItem('rows'));
+        let rowsData;
+        if (Array.isArray(cachedData)) {
+          commit('set', { isCached: true });
+          rowsData = cachedData;
+          console.log(rowsData, 'cache');
+        } else {
+          const { data } = await api.getPayments(params);
+          rowsData = data;
+          console.log(rowsData, 'no');
+          localStorage.setItem('rows', JSON.stringify(data));
+        }
 
-        if (Array.isArray(data)) {
-          commit('set', { data });
+        if (Array.isArray(rowsData)) {
+          commit('set', { data: rowsData });
         }
       } catch (e) {
         // eslint-disable-next-line no-alert
